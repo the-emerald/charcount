@@ -10,7 +10,7 @@ use std::str::FromStr;
 
 mod charcount;
 
-fn read_to_buffer(path: &String, mut buffer: &mut String) -> String{
+fn read_to_buffer(path: &String, mut buffer: &mut String) -> String {
     File::open(&path)
         .expect("Could not open file")
         .read_to_string(&mut buffer)
@@ -53,7 +53,6 @@ fn main() {
     }
     else { // Perform encoding
         let mut original = (b'a'..=b'z') // Generate all ascii characters
-//            .map(|x| x.to_ascii_char().unwrap())
             .map(|x| x as char)
             .collect::<Vec<_>>();
         original.push(' ');
@@ -61,6 +60,7 @@ fn main() {
         let mut shuffled = original.clone(); // Clone and shuffle
         shuffled.shuffle(&mut rand::thread_rng());
 
+        println!("KEY: ");
         println!("{:?}", original);
         println!("{:?}", shuffled);
 
@@ -70,17 +70,16 @@ fn main() {
         }
 
         let mut cipher_output = AsciiString::new();
-        for c in buffer_input.chars() {
+        for c in buffer_input.chars() { // Generate ciphertext using mapping
             let use_char= match unsafe { convert(c) } {
                 Some(t) => t.to_ascii_lowercase(),
                 None => continue
             };
             cipher_output.push(map.get(&use_char).expect("Could not find in mapping!").to_ascii_char().unwrap());
         }
-//        println!("ciphertext: {}", cipher_output);
 
         let mut key_output = String::new();
-        for c in buffer_input.chars() {
+        for c in buffer_input.chars() { // Generate key output using ctype rules
             let push_char= match unsafe { convert(c) } {
                 Some(t) => t.to_ascii_lowercase(),
                 None => continue
@@ -88,11 +87,10 @@ fn main() {
             key_output.push(push_char);
         }
         let mut b = key_output.into_bytes();
-        b.shuffle(&mut rand::thread_rng());
+        b.shuffle(&mut rand::thread_rng()); // Shuffle key
         key_output = String::from_utf8(b).unwrap();
 
         let key_output_ascii = AsciiString::from_str(&key_output).unwrap();
-//        println!("key: {}", key_output_ascii);
 
         // Write to files
         let mut cipher = File::create(&args[2]).unwrap();
