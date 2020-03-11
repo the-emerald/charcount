@@ -9,6 +9,7 @@ edition = "2018"
 [dependencies]
 ascii = "1.0"  # Removed from std a while back
 libc = "0.2.67"  # Use for calling ctype
+rand = "0.7.3"  # Random crate
 
 [profile.release]
 opt-level = 3
