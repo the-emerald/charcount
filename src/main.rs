@@ -1,6 +1,6 @@
 use std::env;
-use std::fs::File;
-use std::io::{Read, Write};
+use std::fs::{File, read_to_string};
+use std::io::{Write};
 use crate::charcount::CharCount;
 use ascii::{ToAsciiChar, AsciiString};
 use std::collections::HashMap;
@@ -10,12 +10,6 @@ use std::str::FromStr;
 
 mod charcount;
 
-fn read_to_buffer(path: &String, mut buffer: &mut String) -> String {
-    File::open(&path)
-        .expect("Could not open file")
-        .read_to_string(&mut buffer)
-        .expect("Could not read to buffer").to_string()
-}
 
 unsafe fn convert(c: char) -> Option<char> {
     let ascii_char = c.to_ascii_char().expect("Could not convert to ASCII");
@@ -43,8 +37,7 @@ fn main() {
     }
 
     // Read input file
-    let mut buffer_input = String::new();
-    read_to_buffer(&args[1], &mut buffer_input);
+    let buffer_input = read_to_string(&args[1]).expect("Could not read file");
 
     if !encode { // Do a CharCount
         let mut count = CharCount::new();
