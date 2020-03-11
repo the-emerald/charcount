@@ -18,7 +18,10 @@ impl CharCount {
     
     pub fn populate(&mut self, buffer: &String) {
         for c in buffer.chars() {
-            let ascii_char = c.to_ascii_char().expect("Could not convert to ASCII");
+            let ascii_char = match c.to_ascii_char() {
+                Ok(ch) => ch,
+                Err(_) => continue,
+            };
             unsafe {
                 if isspace(ascii_char as i32) != 0 {
                     self.count_spaces += 1;
