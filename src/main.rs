@@ -23,16 +23,19 @@ fn main() {
         encode = true;
     }
     else {
-        panic!("Usage: ./encoder <input> [output_ciphertext] [output_key]")
+        panic!("Usage: ./encoder <input> [output_ciphertext] [output_key]");
     }
 
     // Read input file
     let mut buffer_input = String::new();
     read_to_buffer(&args[1], &mut buffer_input);
 
-    if !encode {
+    if !encode { // Do a CharCount
         let mut count = CharCount::new();
         count.populate(&buffer_input);
         count.pretty_print();
+    }
+    else { // Perform encoding
+
     }
 }
