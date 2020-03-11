@@ -7,3 +7,9 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+ascii = "1.0"  # Removed from std a while back
+libc = "0.2.67"  # Use for calling ctype
+
+[profile.release]
+opt-level = 3
+lto = "on"
